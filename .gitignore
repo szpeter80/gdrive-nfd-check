@@ -1,6 +1,7 @@
 # Sensitive information here
 settings.yaml
 credentials.json
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
