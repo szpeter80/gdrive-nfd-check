@@ -2,6 +2,10 @@
 settings.yaml
 credentials.json
 
+#python3 -m venv project-venv
+project-venv/
+.vscode/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
