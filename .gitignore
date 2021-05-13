@@ -5,6 +5,8 @@ credentials.json
 #python3 -m venv project-venv
 project-venv/
 .vscode/
+fileobject_example.txt
+logo.jpg
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -135,3 +137,6 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+########
+
