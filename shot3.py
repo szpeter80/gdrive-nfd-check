@@ -5,20 +5,29 @@ from pydrive.auth  import GoogleAuth,RefreshError
 from pydrive.drive import GoogleDrive
 
 
-def print_gfile(level, gdfv2):
-  ident_str = '{1:>{0}} '.format(4*level, '')
-  print('{}{:<45}| {:<40}'.format(ident_str, gdfv2['title'], gdfv2['id']))  
+fileStash = {}
+childList = {}
 
-  print(ident_str, end='')
-  if 'parents' in gdfv2:
-    for p in gdfv2['parents']:
-      print(p['id']+' ', end='')
-    print()
-  else:
-    print('<no parent>')
+def is_gfolder(gdfv2):
+  return ('mimeType' in gdfv2 and gdfv2['mimeType']=='application/vnd.google-apps.folder')
+  
+def print_gfile(ident_str, gdfv2):
+  prefix = '<DIR> ' if is_gfolder(gdfv2) else ''
+  suffix = ' ***' if not unicodedata.is_normalized('NFC',gdfv2['title']) else ''
+  
+  #fn_nfc = unicodedata.normalize('NFC', file['title'])
 
+  print('{}{:<45}{}'.format(ident_str, prefix+gdfv2['title'],suffix))  
+
+#'mimeType': 'application/vnd.google-apps.folder'
 def proc_item(level, ppath, gdfv2):
-  print_gfile(level, gdfv2)
+  ident_str = '{1:>{0}} '.format(4*level, '')
+  print_gfile(ident_str, gdfv2)
+
+  if (is_gfolder(gdfv2) and gdfv2['id'] in childList):
+    for child_id in childList[gdfv2['id']]:
+      proc_item(level+1, ppath+gdfv2['title']+"/",fileStash[child_id])
+    
 
 gauth = GoogleAuth()
 gauth.LoadCredentials()
@@ -53,8 +62,6 @@ except RefreshError:
       os.remove("credentials.json")
   sys.exit(1)
 
-fileStash = {}
-childList = {}
 for file in allFileList:
   file__id = file['id']
   fileStash[file__id] = file
@@ -69,6 +76,6 @@ for file in allFileList:
 del allFileList
 
 for file in rootFileList:
+  #print(file)
   proc_item(0, '/', file)
-#  if not unicodedata.is_normalized('NFC',file['title']):
-#    fn_nfc = unicodedata.normalize('NFC', file['title'])
+
