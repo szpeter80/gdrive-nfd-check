@@ -44,7 +44,7 @@ logging.basicConfig(format='%(asctime)s %(message)s', level=logging.ERROR)
 if args.debug:
     logging.getLogger().setLevel(level=logging.DEBUG)
 # https://github.com/googleapis/google-api-python-client/issues/299
-logging.getLogger('googleapicliet.discovery_cache').setLevel(logging.ERROR)
+logging.getLogger('googleapiclient.discovery_cache').setLevel(logging.ERROR)
 
 logging.debug(args)
 
