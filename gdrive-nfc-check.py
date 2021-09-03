@@ -30,28 +30,39 @@ parser.add_argument('--q_rootfiles', type=str,
 parser.add_argument('--no-dry_run', dest='dry_run', action='store_false', 
   help='If set, only then will the NFD->NFC conversion take place')
 
+parser.add_argument('--report_memory', dest='report_memory', action='store_true', 
+  help='Enable reporting of used memory')
+
 parser.add_argument('--debug', dest='debug', action='store_true', 
   help='Enable debugging')
 
 parser.set_defaults(print_tree=False)
 parser.set_defaults(q_rootfiles="'root' in parents and trashed = false")
 parser.set_defaults(dry_run=True)
+parser.set_defaults(report_memory=False)
 parser.set_defaults(debug=False)
 
 args = parser.parse_args()
+
 #TODO: instead of messing w/ the root logger, a named self logger should be used
 logging.basicConfig(format='%(asctime)s %(message)s', level=logging.ERROR)
+
 if args.debug:
     logging.getLogger().setLevel(level=logging.DEBUG)
+
 # https://github.com/googleapis/google-api-python-client/issues/299
 logging.getLogger('googleapiclient.discovery_cache').setLevel(logging.ERROR)
 
-logging.debug(args)
+logging.debug('Command line arguments: {}'.format(args))
 
 def report_memory(desc):
-    logging.info('Using {} Mb - {}'.format(
-      resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 1000, 
-      desc))
+    log_msg = 'Using {} Mb - {}'.format(
+        resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 1000, 
+        desc)
+
+    logging.info(log_msg)
+    if args.report_memory:
+        print('\n{}\n'.format(log_msg))
 
 #'mimeType': 'application/vnd.google-apps.folder'
 def is_gfolder(gdfv2):
