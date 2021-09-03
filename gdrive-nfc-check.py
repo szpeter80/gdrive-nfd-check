@@ -1,6 +1,10 @@
 # Relevant info about the file attributes can be found here:
 # https://developers.google.com/drive/api/v2/reference/files#resource-representations
 
+
+# TODO: during processing mark processed files and at the end of the run
+# TODO: complie a list of files, which are not reachable from the drive root object
+
 import warnings,logging,os,sys,resource,argparse,unicodedata
 import oauth2client.client
 
