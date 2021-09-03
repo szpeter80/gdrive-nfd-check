@@ -60,13 +60,19 @@ def is_gfolder(gdfv2):
       and gdfv2['mimeType']=='application/vnd.google-apps.folder')
   
 def print_gfile(ident_str, gdfv2):
-    isdir_str = '<DIR>' if is_gfolder(gdfv2) else ''
+    if is_gfolder(gdfv2):
+        no_of_children = len(childList[gdfv2['id']]) if gdfv2['id'] in childList else 'N/A'
+        isdir_str_pre = '<DIR> '
+        isdir_str_post = ' [{} items]'.format(no_of_children)
+    else:
+        isdir_str_pre  = ''
+        isdir_str_post = ''
     isnonnfc_str = '' if nfcStatus[gdfv2['id']] else '***'
 
     print('{}{}{:<45}'.format(
         isnonnfc_str,
         ident_str, 
-        isdir_str + ' ' + gdfv2['title'] + ' ' + isdir_str ))  
+        isdir_str_pre + gdfv2['title'] + isdir_str_post ))  
 
 def proc_item(level, ppath, gdfv2):
     if unicodedata.is_normalized('NFC',gdfv2['title']):
@@ -138,9 +144,11 @@ for file in allFileList:
     if 'parents' in file:
         for p in file['parents']:
             parent_id = p['id']
+
             if not (parent_id in childList):
                 childList[parent_id] =  []
-                childList[parent_id].append(file__id)
+
+            childList[parent_id].append(file__id)
 
 report_memory('file stash and child list created')
 del allFileList
