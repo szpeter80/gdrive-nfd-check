@@ -1,6 +1,9 @@
 # Relevant info about the file attributes can be found here:
 # https://developers.google.com/drive/api/v2/reference/files#resource-representations
 
+# The original PyDrive project is not maintained anymore. 
+# A maintenance fork is PyDrive2
+# https://pypi.org/project/PyDrive2/
 
 # TODO: during processing mark processed files and at the end of the run
 # TODO: complie a list of files, which are not reachable from the drive root object
@@ -8,8 +11,8 @@
 import warnings,logging,os,sys,resource,argparse,unicodedata
 import oauth2client.client
 
-from pydrive.auth  import GoogleAuth,RefreshError
-from pydrive.drive import GoogleDrive
+from pydrive2.auth  import GoogleAuth,RefreshError
+from pydrive2.drive import GoogleDrive
 
 fileStash = {} # id -> GoogleDriveFile; a Dict of all items received from Drive
 childList = {} # id -> List of child node id's
