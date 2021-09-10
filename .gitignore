@@ -7,6 +7,7 @@ project-venv/
 .vscode/
 fileobject_example.txt
 logo.jpg
+reports/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
