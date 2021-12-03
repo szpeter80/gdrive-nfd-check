@@ -1,4 +1,4 @@
-# gdrive-nfd-check
+# nfd-checker
 
 ## Summary
 
