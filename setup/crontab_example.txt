@@ -1,0 +1,1 @@
+*/20     *       *       *       *       cd /mnt/gdrive-nfd-check && ./run-unattended.sh
