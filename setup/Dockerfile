@@ -9,7 +9,7 @@ ENV NFD_CHECKER__GCP_CLIENT_ID="dummy-clientid"
 ENV NFD_CHECKER__GCP_CLIENT_SECRET="dummy-clientsecret"
 
 ARG GIT_BRANCH="main"
-ARG GIT_TAG="v1-rc2"
+ARG GIT_TAG="1.0.0"
 
 ARG RUNTIME_PKGS="tini \
             bash \
