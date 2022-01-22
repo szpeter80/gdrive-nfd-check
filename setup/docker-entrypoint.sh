@@ -1,9 +1,17 @@
 #!/bin/bash
 
+if [ ! -e ./reports ];
+then
+    mkdir -p "${DATA_DIR}/reports"; 
+fi;
+
 cp "${INSTALL_DIR}/setup/settings.yaml.example" "${DATA_DIR}/settings.yaml"
 
-sed -i "s/your-client-id\.apps\.googleusercontent\.com/$NFD_CHECKER__GCP_CLIENT_ID/g"  "${DATA_DIR}/settings.yaml"
-sed -i "s/tell no-one this/$NFD_CHECKER__GCP_CLIENT_SECRET/g"  "${DATA_DIR}/settings.yaml"
+sed -i "s/your-client-id\.apps\.googleusercontent\.com/${NFD_CHECKER__GCP_CLIENT_ID}/g"  "${DATA_DIR}/settings.yaml"
+sed -i "s/tell no-one this/${NFD_CHECKER__GCP_CLIENT_SECRET}/g"                          "${DATA_DIR}/settings.yaml"
+
+DATA_DIR_ESCAPED=$(echo "${DATA_DIR}" | sed 's/\//\\\//g')
+sed -i "s/credentials.json/\"${DATA_DIR_ESCAPED}\/credentials.json\"/g"                           "${DATA_DIR}/settings.yaml"
 
 ### # crond --help                                                                                                                       
 ### BusyBox v1.32.1 () multi-call binary.                                                                                                                       

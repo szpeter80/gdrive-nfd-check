@@ -8,8 +8,8 @@ ENV DATA_DIR="/mnt/gdrive-nfd-check"
 ENV NFD_CHECKER__GCP_CLIENT_ID="dummy-clientid"
 ENV NFD_CHECKER__GCP_CLIENT_SECRET="dummy-clientsecret"
 
-ARG GIT_BRANCH="master"
-ARG GIT_TAG="v1-rc1"
+ARG GIT_BRANCH="main"
+ARG GIT_TAG="v1-rc2"
 
 ARG RUNTIME_PKGS="tini \
             bash \
@@ -40,7 +40,8 @@ RUN set -eux && \
     mkdir -p ${DATA_DIR} && \
     mkdir -p ${INSTALL_DIR} && \
     cd ${INSTALL_DIR} && \
-    git checkout -b ${GIT_BRANCH} --single-branch --depth=1 https://github.com/szpeter80/gdrive-nfd-check . && \
+    git clone -b ${GIT_BRANCH} --single-branch https://github.com/szpeter80/gdrive-nfd-check . && \
+    git checkout ${GIT_TAG} && \
     rm -rf ./.git && \
     ln -s ${DATA_DIR}/reports reports && \
     ln -s ${DATA_DIR}/settings.yaml settings.yaml && \
@@ -59,9 +60,11 @@ RUN set -eux && \
 RUN set -eux && \
     echo -e "#!/bin/bash\n\ncd ${INSTALL_DIR} && ./run-unattended.sh" \
         >> /etc/periodic/15min/nfd-checker && \
+        chmod +x /etc/periodic/15min/nfd-checker && \
     echo "Docker crontab setup RUN success"
 
 COPY docker-entrypoint.sh /docker-entrypoint.sh
 
-# CMD /docker-entrypoint.sh
+VOLUME [ "${DATA_DIR}" ]
+# CMD can be overridden in "docker run", ENTRYPOINT can't be
 ENTRYPOINT ["/sbin/tini", "--", "/docker-entrypoint.sh"] 

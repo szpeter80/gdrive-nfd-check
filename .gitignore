@@ -1,6 +1,7 @@
 # Sensitive information here
 settings.yaml
 credentials.json
+docker-env
 
 #python3 -m venv project-venv
 project-venv/
